@@ -1,18 +1,14 @@
 <!doctype html>
 <html lang="sr">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Buon Natale 🎄</title>
 
   <style>
-    :root {
-      --snow: rgba(255, 255, 255, 0.92);
-    }
+    :root { --snow: rgba(255, 255, 255, 0.92); }
 
-    html,
-    body {
+    html, body {
       height: 100%;
       min-height: 100vh;
       min-height: 100dvh;
@@ -21,6 +17,8 @@
       overflow: hidden;
       color: #fff;
       background: #000;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
     }
 
     .bg {
@@ -34,8 +32,8 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.10), rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.82) 100%),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,0.10), rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.82) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
       pointer-events: none;
     }
 
@@ -55,22 +53,13 @@
       width: min(92vw, 520px);
       padding: 22px 18px;
       border-radius: 18px;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
     }
 
-    .title {
-      font-size: clamp(28px, 5vw, 44px);
-      margin: 0 0 10px;
-    }
-
-    .subtitle {
-      opacity: 0.9;
-      margin: 0 0 18px;
-      line-height: 1.35;
-    }
-
+    .title { font-size: clamp(28px, 5vw, 44px); margin: 0 0 10px; }
+    .subtitle { opacity: 0.9; margin: 0 0 18px; line-height: 1.35; }
     .btn {
       font-size: 1.05rem;
       padding: 12px 20px;
@@ -79,13 +68,11 @@
       color: #111;
       border: none;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     }
+    .btn:active { transform: scale(0.98); }
 
-    .btn:active {
-      transform: scale(0.98);
-    }
-
+    /* Snow */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -93,19 +80,15 @@
       height: 6px;
       background: var(--snow);
       border-radius: 50%;
-      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.9));
       animation: fall linear infinite;
       opacity: 0.95;
       z-index: 10;
       pointer-events: none;
     }
+    @keyframes fall { to { transform: translateY(110vh) translateX(var(--drift)); } }
 
-    @keyframes fall {
-      to {
-        transform: translateY(110vh) translateX(var(--drift));
-      }
-    }
-
+    /* Sleigh stage */
     .stage {
       position: fixed;
       left: -40vw;
@@ -116,66 +99,40 @@
       z-index: 15;
       display: none;
       animation: fly 9s ease-in-out infinite;
-      filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 18px 18px rgba(0,0,0,0.35));
     }
-
     @keyframes fly {
-      0% {
-        transform: translateX(-60vw) translateY(2vh) scale(0.75);
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 1;
-      }
-
-      55% {
-        transform: translateX(70vw) translateY(-2vh) scale(1);
-      }
-
-      100% {
-        transform: translateX(150vw) translateY(1vh) scale(0.9);
-        opacity: 0;
-      }
+      0% { transform: translateX(-60vw) translateY(2vh) scale(0.75); opacity: 0; }
+      10% { opacity: 1; }
+      55% { transform: translateX(70vw) translateY(-2vh) scale(1); }
+      100% { transform: translateX(150vw) translateY(1vh) scale(0.9); opacity: 0; }
     }
-
-    .sleighWrap {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
+    .sleighWrap { position: relative; width: 100%; height: 100%; }
     .sleighImg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
       object-fit: contain;
       transform: rotate(-2deg);
     }
-
     .face {
       position: absolute;
-      left: 15%;
-      top: 18%;
+      left: 15%; top: 18%;
       width: 18%;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+      border: 3px solid rgba(255,255,255,0.9);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.55);
       filter: saturate(1.05) contrast(1.05);
       transform: rotate(-6deg);
     }
-
     .faceGlow {
       position: absolute;
-      left: 52%;
-      top: 16%;
+      left: 52%; top: 16%;
       width: 22%;
       aspect-ratio: 1 / 1;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 70%);
+      background: radial-gradient(circle, rgba(255,255,255,0.28), rgba(255,255,255,0) 70%);
       filter: blur(2px);
       opacity: 0.8;
       transform: rotate(-6deg);
@@ -190,7 +147,7 @@
       font-size: 12px;
       opacity: 0.7;
       z-index: 30;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
     /* Gifts */
@@ -203,104 +160,14 @@
       z-index: 16;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+      touch-action: manipulation;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.35));
       animation: giftFall linear forwards;
     }
+    .gift img { width: 100%; height: 100%; object-fit: contain; }
+    @keyframes giftFall { to { transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot)); } }
 
-    .gift img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    @keyframes giftFall {
-      to {
-        transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot));
-      }
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      z-index: 50;
-    }
-
-    .modal.is-open {
-      display: block;
-    }
-
-    .modalBackdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(4px);
-    }
-
-    .modalCard {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-
-      max-width: 92vw;
-      max-height: 86vh;
-
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(10, 10, 12, 0.88);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-
-      display: inline-flex;
-      /* 🔥 BITNO */
-      flex-direction: column;
-    }
-
-    .modalBody {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      max-width: 92vw;
-      max-height: 70vh;
-
-      background: transparent;
-    }
-
-
-    .modalImg {
-      max-width: 92vw;
-      max-height: 70vh;
-      width: auto;
-      height: auto;
-
-      display: block;
-    }
-
-    .modalDesc {
-      padding: 14px 18px;
-      text-align: center;
-      background: rgba(0, 0, 0, 0.35);
-    }
-
-    .modalClose {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      border: 0;
-      border-radius: 999px;
-      padding: 10px 12px;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.9);
-      color: #111;
-      font-weight: 700;
-      z-index: 2;
-    }
-
-
-    /* Stars (clickable) */
+    /* Stars */
     .star {
       position: fixed;
       top: -12vh;
@@ -311,53 +178,108 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
-      filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.35));
       animation: starFall linear forwards;
     }
-
     .star img {
       width: 100%;
       height: 100%;
       object-fit: contain;
       animation: twinkle 1.8s ease-in-out infinite;
     }
-
-    @keyframes starFall {
-      to {
-        transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot));
-      }
-    }
-
+    @keyframes starFall { to { transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot)); } }
     @keyframes twinkle {
-
-      0%,
-      100% {
-        transform: scale(1);
-        opacity: 0.9;
-      }
-
-      50% {
-        transform: scale(1.06);
-        opacity: 1;
-      }
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.06); opacity: 1; }
     }
 
-    /* Video in modal */
-    .modalVideo {
+    /* Modal */
+    .modal { position: fixed; inset: 0; display: none; z-index: 50; }
+    .modal.is-open { display: block; }
+    .modalBackdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Mobile-stable modal sizing */
+    .modalCard{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width: min(96vw, 860px);
+      height: min(86vh, 720px);
+
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(10,10,12,0.88);
+      box-shadow:0 20px 60px rgba(0,0,0,0.6);
+
+      display:flex;
+      flex-direction:column;
+    }
+
+    .modalBody{
+      flex: 1 1 auto;
+      min-height: 0;            /* ✅ critical for mobile flex */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      background: rgba(0,0,0,0.15);
+    }
+
+    .modalImg{
       max-width: 100%;
       max-height: 100%;
       width: auto;
       height: auto;
-      display: none;
-      /* ✅ hidden by default */
+      display:block;
+    }
+
+    .modalVideo{
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      display: none; /* shown only for video */
+    }
+
+    .modalDesc{
+      flex: 0 0 auto;
+      padding: 12px 14px;
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.35;
+      text-align:center;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+    }
+
+    .modalClose{
+      position:absolute;
+      top:10px;
+      right:10px;
+      border:0;
+      border-radius:999px;
+      padding:10px 12px;
+      cursor:pointer;
+      background: rgba(255,255,255,0.9);
+      color:#111;
+      font-weight:700;
+      z-index:2;
     }
 
     @media (max-width: 600px) {
       .bg { transform: scale(1.00); }
-      .star {
-        width: 48px;
-        height: 48px;
-      }
+      .center { padding: 14px; }
+      .card { padding: 18px 14px; }
+      .star { width: 48px; height: 48px; }
+      .gift { width: 52px; height: 52px; }
+      .modalCard{ width: 96vw; height: 88vh; }
     }
   </style>
 </head>
@@ -372,15 +294,12 @@
     <div class="card">
       <h1 class="title">Buon Natale, <span id="name">Kiwi</span> 🎁</h1>
       <p class="subtitle">Press “Start” and may the magic happen ✨</p>
-      <p>
+      <p style="opacity:.92; line-height:1.35; margin:0 0 16px;">
         For my dearest Marco 🎄🎅🏻🥂🎊💘👩🏼‍❤️‍💋‍👨🏻
         I wish you the happiest Christmas until now. Spend it surrounded with good food, best vibes, fun games, and most
-        importantly, with people whom you love!
-        When you hit start, you will see many gifts for you - every gift reveils one of our memories ❤️
-        There is 46 different ones, make sure to open them all! (And turn the volume up)
-        With hope and belief that this is our last Christmas apart,
-        7 tons of kisses, 3 excavators of hugs, and love forever,
-        Iva ❤️
+        importantly, with people whom you love! When you hit start, you will see many gifts for you - every gift reveils one
+        of our memories ❤️ There is 46 different ones, make sure to open them all! (And turn the volume up) With hope and
+        belief that this is our last Christmas apart, 7 tons of kisses, 3 excavators of hugs, and love forever, Iva ❤️
       </p>
       <button class="btn" id="start">Start</button>
     </div>
@@ -440,7 +359,7 @@
     const stage = document.getElementById('stage');
     const audio = document.getElementById('bgm');
 
-    // -------- Data: photos + descriptions --------
+    // -------- Data --------
     const TOTAL_PHOTOS = 43;
     const TOTAL_VIDEOS = 3;
 
@@ -496,10 +415,11 @@
       "Ti amo tanto"
     ];
 
-
-
     if (photoDescriptions.length !== TOTAL_PHOTOS) {
       console.error(`❌ photoDescriptions.length=${photoDescriptions.length}, TOTAL_PHOTOS=${TOTAL_PHOTOS}`);
+    }
+    if (videoDescriptions.length !== TOTAL_VIDEOS) {
+      console.error(`❌ videoDescriptions.length=${videoDescriptions.length}, TOTAL_VIDEOS=${TOTAL_VIDEOS}`);
     }
 
     const giftItems = Array.from({ length: TOTAL_PHOTOS }, (_, i) => ({
@@ -508,11 +428,11 @@
     }));
 
     const videoItems = Array.from({ length: TOTAL_VIDEOS }, (_, i) => ({
-      src: `videos/${i + 1}.mp4`,          // npr. videos/1.mp4
+      src: `videos/${i + 1}.mp4`,
       description: videoDescriptions[i] ?? `Video ${i + 1}`
     }));
 
-    // -------- Deck shuffle (ensures every photo appears once) --------
+    // -------- Utils --------
     function shuffle(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -521,9 +441,13 @@
       return arr;
     }
 
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // -------- Decks --------
     let revealDeck = [];
     let revealIndex = 0;
-
     function resetDeck() {
       revealDeck = shuffle([...giftItems]);
       revealIndex = 0;
@@ -531,31 +455,31 @@
 
     let videoDeck = [];
     let videoIndex = 0;
-
     function resetVideoDeck() {
       videoDeck = shuffle([...videoItems]);
       videoIndex = 0;
     }
 
-    // -------- Gift skins --------
+    // -------- Skins --------
     const giftSkins = ["gift-red.png", "gift-green.png", "gift-gold.png"];
-    function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    const STAR_IMAGE = "star.png";
 
     // -------- Modal --------
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modalImg");
     const modalDesc = document.getElementById("modalDesc");
     const modalVideo = document.getElementById("modalVideo");
-
     const modalClose = document.getElementById("modalClose");
     const modalBackdrop = document.getElementById("modalBackdrop");
 
     function openImageModal(item) {
-      // show img, hide video
+      // hide video
       modalVideo.pause?.();
       modalVideo.removeAttribute("src");
+      modalVideo.load();
       modalVideo.style.display = "none";
 
+      // show image
       modalImg.style.display = "block";
       modalImg.src = item.src;
 
@@ -566,10 +490,11 @@
     }
 
     function openVideoModal(item) {
-      // hide img, show video
+      // hide image
       modalImg.removeAttribute("src");
       modalImg.style.display = "none";
 
+      // show video
       modalVideo.style.display = "block";
       modalVideo.src = item.src;
       modalVideo.load();
@@ -579,100 +504,35 @@
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
 
-      // pokušaj autoplay; ako browser blokira, user može play na controls
-      modalVideo.play?.().catch(() => { });
+      modalVideo.play?.().catch(() => {});
     }
 
     function closeModal() {
       modal.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
 
-      modalImg.src = "";
       modalDesc.textContent = "";
 
-      // stop video hard
+      // reset image
+      modalImg.src = "";
+      modalImg.style.display = "block";
+
+      // reset video
       modalVideo.pause?.();
       modalVideo.removeAttribute("src");
       modalVideo.load();
       modalVideo.style.display = "none";
-
-      modalImg.style.display = "block"; // default nazad
     }
 
     modalClose.addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", closeModal);
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModal();
-    });
+    window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-    // -------- Gift spawning --------
+    // -------- Gifts --------
     let giftIntervalId = null;
 
-    const STAR_IMAGE = "star.png";
-
-    let starIntervalId = null;
-
-    function spawnStar() {
-      // infinite deck loop za videe
-      if (videoIndex >= videoDeck.length) {
-        resetVideoDeck();
-      }
-
-      const item = videoDeck[videoIndex];
-      videoIndex++;
-
-      const el = document.createElement("div");
-      el.className = "star";
-
-      // random pozicija + drift
-      el.style.left = Math.random() * 100 + "vw";
-      el.style.setProperty("--drift", (Math.random() * 26 - 13) + "vw");
-      el.style.setProperty("--rot", (Math.random() * 180 - 90) + "deg");
-
-      // sporije, “premium” padanje
-      const dur = 9 + Math.random() * 6; // 9–15s
-      el.style.animationDuration = dur + "s";
-
-      // star image
-      const img = document.createElement("img");
-      img.src = STAR_IMAGE;
-      img.alt = "Star";
-      el.appendChild(img);
-
-      function openFromStar(e) {
-        e.preventDefault?.();
-        e.stopPropagation?.();
-        openVideoModal(item);
-        el.remove();
-      }
-
-      // mobile-safe eventi
-      el.addEventListener("pointerdown", openFromStar, { once: true });
-      el.addEventListener("touchstart", openFromStar, { once: true, passive: false });
-      el.addEventListener("click", openFromStar, { once: true });
-
-      el.addEventListener("animationend", () => el.remove());
-
-      document.body.appendChild(el);
-    }
-
-    function startStars() {
-      resetVideoDeck();
-      spawnStar();
-      starIntervalId = setInterval(spawnStar, 1400); // gustina zvezda
-    }
-
-    function stopStars() {
-      if (starIntervalId) clearInterval(starIntervalId);
-      starIntervalId = null;
-    }
-
     function spawnGift() {
-      // stop if deck empty
-      if (revealIndex >= revealDeck.length) {
-        resetDeck();
-        return;
-      }
+      if (revealIndex >= revealDeck.length) resetDeck();
 
       const item = revealDeck[revealIndex];
       revealIndex++;
@@ -695,11 +555,17 @@
       img.alt = "Gift";
       el.appendChild(img);
 
-      el.addEventListener("click", (e) => {
-        e.stopPropagation();
-        openModal(item);
+      function openFromGift(e) {
+        e.preventDefault?.();
+        e.stopPropagation?.();
+        openImageModal(item);
         el.remove();
-      }, { once: true });
+      }
+
+      // mobile + desktop safe
+      el.addEventListener("pointerdown", openFromGift, { once: true });
+      el.addEventListener("touchstart", openFromGift, { once: true, passive: false });
+      el.addEventListener("click", openFromGift, { once: true });
 
       el.addEventListener("animationend", () => el.remove());
 
@@ -717,16 +583,68 @@
       giftIntervalId = null;
     }
 
-    // -------- Start button (ONLY ONCE) --------
+    // -------- Stars (Videos) --------
+    let starIntervalId = null;
+
+    function spawnStar() {
+      if (videoIndex >= videoDeck.length) resetVideoDeck();
+
+      const item = videoDeck[videoIndex];
+      videoIndex++;
+
+      const el = document.createElement("div");
+      el.className = "star";
+
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.setProperty("--drift", (Math.random() * 26 - 13) + "vw");
+      el.style.setProperty("--rot", (Math.random() * 180 - 90) + "deg");
+
+      const dur = 9 + Math.random() * 6; // 9–15s
+      el.style.animationDuration = dur + "s";
+
+      const img = document.createElement("img");
+      img.src = STAR_IMAGE;
+      img.alt = "Star";
+      el.appendChild(img);
+
+      function openFromStar(e) {
+        e.preventDefault?.();
+        e.stopPropagation?.();
+        openVideoModal(item);
+        el.remove();
+      }
+
+      el.addEventListener("pointerdown", openFromStar, { once: true });
+      el.addEventListener("touchstart", openFromStar, { once: true, passive: false });
+      el.addEventListener("click", openFromStar, { once: true });
+
+      el.addEventListener("animationend", () => el.remove());
+
+      document.body.appendChild(el);
+    }
+
+    function startStars() {
+      resetVideoDeck();
+      spawnStar();
+      starIntervalId = setInterval(spawnStar, 1400);
+    }
+
+    function stopStars() {
+      if (starIntervalId) clearInterval(starIntervalId);
+      starIntervalId = null;
+    }
+
+    // -------- Start --------
     startBtn.addEventListener('click', async () => {
-      try { await audio.play(); } catch (e) { }
+      try { await audio.play(); } catch (e) {}
+
       gate.style.display = 'none';
       stage.style.display = 'block';
+
       snow(95);
       startGifts();
       startStars();
     }, { once: true });
   </script>
 </body>
-
 </html>
