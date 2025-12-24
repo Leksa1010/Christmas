@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="sr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buon Natale 🎄</title>
+
+  <style>
+    :root {
+      --snow: rgba(255, 255, 255, 0.92);
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      overflow: hidden;
+      color: #fff;
+      background: #000;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      background: url("bg.jpg") center/cover no-repeat;
+      transform: scale(1.03);
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.10), rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.82) 100%),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5));
+      pointer-events: none;
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      z-index: 20;
+      backdrop-filter: blur(3px);
+    }
+
+    .card {
+      max-width: 520px;
+      width: min(92vw, 520px);
+      padding: 22px 18px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .title {
+      font-size: clamp(28px, 5vw, 44px);
+      margin: 0 0 10px;
+    }
+
+    .subtitle {
+      opacity: 0.9;
+      margin: 0 0 18px;
+      line-height: 1.35;
+    }
+
+    .btn {
+      font-size: 1.05rem;
+      padding: 12px 20px;
+      border-radius: 999px;
+      background: #fff;
+      color: #111;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      width: 6px;
+      height: 6px;
+      background: var(--snow);
+      border-radius: 50%;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+      animation: fall linear infinite;
+      opacity: 0.95;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) translateX(var(--drift));
+      }
+    }
+
+    .stage {
+      position: fixed;
+      left: -40vw;
+      top: 14vh;
+      width: min(520px, 60vw);
+      aspect-ratio: 16 / 9;
+      pointer-events: none;
+      z-index: 15;
+      display: none;
+      animation: fly 9s ease-in-out infinite;
+      filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.35));
+    }
+
+    @keyframes fly {
+      0% {
+        transform: translateX(-60vw) translateY(2vh) scale(0.75);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      55% {
+        transform: translateX(70vw) translateY(-2vh) scale(1);
+      }
+
+      100% {
+        transform: translateX(150vw) translateY(1vh) scale(0.9);
+        opacity: 0;
+      }
+    }
+
+    .sleighWrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sleighImg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: rotate(-2deg);
+    }
+
+    .face {
+      position: absolute;
+      left: 15%;
+      top: 18%;
+      width: 18%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+      filter: saturate(1.05) contrast(1.05);
+      transform: rotate(-6deg);
+    }
+
+    .faceGlow {
+      position: absolute;
+      left: 52%;
+      top: 16%;
+      width: 22%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 70%);
+      filter: blur(2px);
+      opacity: 0.8;
+      transform: rotate(-6deg);
+      pointer-events: none;
+    }
+
+    .credit {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.7;
+      z-index: 30;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Gifts */
+    .gift {
+      position: fixed;
+      top: -12vh;
+      width: 46px;
+      height: 46px;
+      cursor: pointer;
+      z-index: 16;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+      animation: giftFall linear forwards;
+    }
+
+    .gift img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    @keyframes giftFall {
+      to {
+        transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot));
+      }
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 50;
+    }
+
+    .modal.is-open {
+      display: block;
+    }
+
+    .modalBackdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+    }
+
+    .modalCard {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      max-width: 92vw;
+      max-height: 86vh;
+
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(10, 10, 12, 0.88);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
+      display: inline-flex;
+      /* 🔥 BITNO */
+      flex-direction: column;
+    }
+
+    .modalBody {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      max-width: 92vw;
+      max-height: 70vh;
+
+      background: transparent;
+    }
+
+
+    .modalImg {
+      max-width: 92vw;
+      max-height: 70vh;
+      width: auto;
+      height: auto;
+
+      display: block;
+    }
+
+    .modalDesc {
+      padding: 14px 18px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .modalClose {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 12px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.9);
+      color: #111;
+      font-weight: 700;
+      z-index: 2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <audio id="bgm" preload="auto" src="music.mp3"></audio>
+
+  <div class="center" id="gate">
+    <div class="card">
+      <h1 class="title">Buon Natale, <span id="name">Kiwi</span> 🎁</h1>
+      <p class="subtitle">Press “Start” and may the magic happen ✨</p>
+      <button class="btn" id="start">Start</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage" aria-hidden="true">
+    <div class="sleighWrap">
+      <img src="sleigh.png" alt="Sleigh" class="sleighImg" />
+      <div class="faceGlow"></div>
+      <img src="face.png" alt="Face" class="face" />
+    </div>
+  </div>
+
+  <div class="credit">Made with ❤️ and snow.</div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalBackdrop" id="modalBackdrop"></div>
+
+    <div class="modalCard" role="dialog" aria-modal="true" aria-label="Gift">
+      <button class="modalClose" id="modalClose">✕</button>
+
+      <div class="modalBody">
+        <img class="modalImg" id="modalImg" src="" alt="Gift image" />
+      </div>
+
+      <p class="modalDesc" id="modalDesc"></p>
+    </div>
+  </div>
+
+  <script>
+    // -------- Personalize name: ?name=Kiwi --------
+    const params = new URLSearchParams(location.search);
+    const qpName = params.get('name');
+    if (qpName) document.getElementById('name').textContent = qpName;
+
+    // -------- Snow --------
+    function snow(count = 90) {
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'snowflake';
+        const size = Math.random() * 4 + 2;
+        s.style.width = size + 'px';
+        s.style.height = size + 'px';
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.animationDuration = 6 + Math.random() * 8 + 's';
+        s.style.animationDelay = (-Math.random() * 8) + 's';
+        s.style.setProperty('--drift', (Math.random() * 40 - 20) + 'vw');
+        document.body.appendChild(s);
+      }
+    }
+
+    // -------- Elements --------
+    const startBtn = document.getElementById('start');
+    const gate = document.getElementById('gate');
+    const stage = document.getElementById('stage');
+    const audio = document.getElementById('bgm');
+
+    // -------- Data: photos + descriptions --------
+    const TOTAL_PHOTOS = 43;
+
+    const photoDescriptions = [
+      "Kiwi, devi sapere che ti amo solo per il tuo mullet",
+      "Vedi?",
+      "I think this trip was what really had me be sure i want you forever (and idc im abandoning my own rule of no “forever” talk)",
+      "Nessuno mi fa sorridere come il mio Kiwi",
+      "Minerva came home",
+      "Hey Marco, remeber when we ate chips?",
+      "❤️",
+      "Makica moj",
+      "Guess who's hungry",
+      "❤️",
+      "Kiwi e Gattiva, due gattini ubriachi che non capiscono niente",
+      "Mi è piaciuto molto stare qui con te, non vedo l'ora di apprezzarlo ancora di più con Francesca",
+      "❤️",
+      "I got eyes only for you",
+      "Mr. Hawking",
+      "1st date and the day we decided we're pretty damn good match",
+      "Remember when we were dating for 3 days before being official",
+      "Questo ragazzo mi fa venire voglia di fargli una lap dance 😮🤭",
+      "Primo incontro con la cucina balcanica, stai per scoprire tanti nuovi sapori",
+      "❤️",
+      "You knew it couldn't be without this one. Love my big eyes!",
+      "Simply, stay here forever 🥺",
+      "The judge and the judging committee",
+      "Opis 24",
+      "Opis 25",
+      "Opis 26",
+      "Opis 27",
+      "Opis 28",
+      "Opis 29",
+      "Opis 30",
+      "Opis 31",
+      "Opis 32",
+      "Opis 33",
+      "Opis 34",
+      "Opis 35",
+      "Opis 36",
+      "Opis 37",
+      "Opis 38",
+      "Opis 39",
+      "Opis 40",
+      "Opis 41",
+      "Opis 42",
+      "Opis 43",
+    ];
+
+    if (photoDescriptions.length !== TOTAL_PHOTOS) {
+      console.error(`❌ photoDescriptions.length=${photoDescriptions.length}, TOTAL_PHOTOS=${TOTAL_PHOTOS}`);
+    }
+
+    const giftItems = Array.from({ length: TOTAL_PHOTOS }, (_, i) => ({
+      src: `memories/${i + 1}.jpg`,
+      description: photoDescriptions[i] ?? `Opis za sliku ${i + 1}`
+    }));
+
+    // -------- Deck shuffle (ensures every photo appears once) --------
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    let revealDeck = [];
+    let revealIndex = 0;
+
+    function resetDeck() {
+      revealDeck = shuffle([...giftItems]);
+      revealIndex = 0;
+    }
+
+    // -------- Gift skins --------
+    const giftSkins = ["gift-red.png", "gift-green.png", "gift-gold.png"];
+    function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    // -------- Modal --------
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalClose = document.getElementById("modalClose");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+
+    function openModal(item) {
+      modalImg.src = item.src;
+      modalDesc.textContent = item.description;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      modalImg.src = "";
+      modalDesc.textContent = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modalBackdrop.addEventListener("click", closeModal);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    // -------- Gift spawning --------
+    let giftIntervalId = null;
+
+    function spawnGift() {
+      // stop if deck empty
+      if (revealIndex >= revealDeck.length) {
+        resetDeck();
+        return;
+      }
+
+      const item = revealDeck[revealIndex];
+      revealIndex++;
+
+      const skin = pickRandom(giftSkins);
+
+      const el = document.createElement("div");
+      el.className = "gift";
+
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.setProperty("--drift", (Math.random() * 30 - 15) + "vw");
+      el.style.setProperty("--rot", (Math.random() * 140 - 70) + "deg");
+
+      let dur = 6 + Math.random() * 6;
+      if (skin.toLowerCase().includes("gold")) dur += 4;
+      el.style.animationDuration = dur + "s";
+
+      const img = document.createElement("img");
+      img.src = skin;
+      img.alt = "Gift";
+      el.appendChild(img);
+
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openModal(item);
+        el.remove();
+      }, { once: true });
+
+      el.addEventListener("animationend", () => el.remove());
+
+      document.body.appendChild(el);
+    }
+
+    function startGifts() {
+      resetDeck();
+      spawnGift();
+      giftIntervalId = setInterval(spawnGift, 650);
+    }
+
+    function stopGifts() {
+      if (giftIntervalId) clearInterval(giftIntervalId);
+      giftIntervalId = null;
+    }
+
+    // -------- Start button (ONLY ONCE) --------
+    startBtn.addEventListener('click', async () => {
+      try { await audio.play(); } catch (e) { }
+      gate.style.display = 'none';
+      stage.style.display = 'block';
+      snow(95);
+      startGifts();
+    }, { once: true });
+  </script>
+</body>
+
+</html>
