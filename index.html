@@ -297,6 +297,66 @@
       font-weight: 700;
       z-index: 2;
     }
+
+
+    /* Stars (clickable) */
+    .star {
+      position: fixed;
+      top: -12vh;
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      z-index: 16;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.35));
+      animation: starFall linear forwards;
+    }
+
+    .star img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: twinkle 1.8s ease-in-out infinite;
+    }
+
+    @keyframes starFall {
+      to {
+        transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot));
+      }
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: scale(1.06);
+        opacity: 1;
+      }
+    }
+
+    /* Video in modal */
+    .modalVideo {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      display: none;
+      /* ✅ hidden by default */
+    }
+
+    @media (max-width: 600px) {
+      .star {
+        width: 48px;
+        height: 48px;
+      }
+    }
   </style>
 </head>
 
@@ -310,6 +370,16 @@
     <div class="card">
       <h1 class="title">Buon Natale, <span id="name">Kiwi</span> 🎁</h1>
       <p class="subtitle">Press “Start” and may the magic happen ✨</p>
+      <p>
+        For my dearest Marco 🎄🎅🏻🥂🎊💘👩🏼‍❤️‍💋‍👨🏻
+        I wish you the happiest Christmas until now. Spend it surrounded with good food, best vibes, fun games, and most
+        importantly, with people whom you love!
+        When you hit start, you will see many gifts for you - every gift reveils one of our memories ❤️
+        There is 46 different ones, make sure to open them all! (And turn the volume up)
+        With hope and belief that this is our last Christmas apart,
+        7 tons of kisses, 3 excavators of hugs, and love forever,
+                                                                    Iva ❤️
+      </p>
       <button class="btn" id="start">Start</button>
     </div>
   </div>
@@ -333,6 +403,7 @@
 
       <div class="modalBody">
         <img class="modalImg" id="modalImg" src="" alt="Gift image" />
+        <video class="modalVideo" id="modalVideo" controls playsinline></video>
       </div>
 
       <p class="modalDesc" id="modalDesc"></p>
@@ -369,6 +440,7 @@
 
     // -------- Data: photos + descriptions --------
     const TOTAL_PHOTOS = 43;
+    const TOTAL_VIDEOS = 3;
 
     const photoDescriptions = [
       "Kiwi, devi sapere che ti amo solo per il tuo mullet",
@@ -416,6 +488,14 @@
       "And with this expression, still, you my nigga",
     ];
 
+    const videoDescriptions = [
+      "XIAN OUR G!!! 🐐❤️",
+      "Let me bother you some more",
+      "Ti amo tanto"
+    ];
+
+
+
     if (photoDescriptions.length !== TOTAL_PHOTOS) {
       console.error(`❌ photoDescriptions.length=${photoDescriptions.length}, TOTAL_PHOTOS=${TOTAL_PHOTOS}`);
     }
@@ -423,6 +503,11 @@
     const giftItems = Array.from({ length: TOTAL_PHOTOS }, (_, i) => ({
       src: `memories/${i + 1}.jpg`,
       description: photoDescriptions[i] ?? `Opis za sliku ${i + 1}`
+    }));
+
+    const videoItems = Array.from({ length: TOTAL_VIDEOS }, (_, i) => ({
+      src: `videos/${i + 1}.mp4`,          // npr. videos/1.mp4
+      description: videoDescriptions[i] ?? `Video ${i + 1}`
     }));
 
     // -------- Deck shuffle (ensures every photo appears once) --------
@@ -442,6 +527,14 @@
       revealIndex = 0;
     }
 
+    let videoDeck = [];
+    let videoIndex = 0;
+
+    function resetVideoDeck() {
+      videoDeck = shuffle([...videoItems]);
+      videoIndex = 0;
+    }
+
     // -------- Gift skins --------
     const giftSkins = ["gift-red.png", "gift-green.png", "gift-gold.png"];
     function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
@@ -450,21 +543,58 @@
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modalImg");
     const modalDesc = document.getElementById("modalDesc");
+    const modalVideo = document.getElementById("modalVideo");
+
     const modalClose = document.getElementById("modalClose");
     const modalBackdrop = document.getElementById("modalBackdrop");
 
-    function openModal(item) {
+    function openImageModal(item) {
+      // show img, hide video
+      modalVideo.pause?.();
+      modalVideo.removeAttribute("src");
+      modalVideo.style.display = "none";
+
+      modalImg.style.display = "block";
       modalImg.src = item.src;
+
       modalDesc.textContent = item.description;
+
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
+    }
+
+    function openVideoModal(item) {
+      // hide img, show video
+      modalImg.removeAttribute("src");
+      modalImg.style.display = "none";
+
+      modalVideo.style.display = "block";
+      modalVideo.src = item.src;
+      modalVideo.load();
+
+      modalDesc.textContent = item.description;
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+
+      // pokušaj autoplay; ako browser blokira, user može play na controls
+      modalVideo.play?.().catch(() => { });
     }
 
     function closeModal() {
       modal.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
+
       modalImg.src = "";
       modalDesc.textContent = "";
+
+      // stop video hard
+      modalVideo.pause?.();
+      modalVideo.removeAttribute("src");
+      modalVideo.load();
+      modalVideo.style.display = "none";
+
+      modalImg.style.display = "block"; // default nazad
     }
 
     modalClose.addEventListener("click", closeModal);
@@ -475,6 +605,65 @@
 
     // -------- Gift spawning --------
     let giftIntervalId = null;
+
+    const STAR_IMAGE = "star.png";
+
+    let starIntervalId = null;
+
+    function spawnStar() {
+      // infinite deck loop za videe
+      if (videoIndex >= videoDeck.length) {
+        resetVideoDeck();
+      }
+
+      const item = videoDeck[videoIndex];
+      videoIndex++;
+
+      const el = document.createElement("div");
+      el.className = "star";
+
+      // random pozicija + drift
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.setProperty("--drift", (Math.random() * 26 - 13) + "vw");
+      el.style.setProperty("--rot", (Math.random() * 180 - 90) + "deg");
+
+      // sporije, “premium” padanje
+      const dur = 9 + Math.random() * 6; // 9–15s
+      el.style.animationDuration = dur + "s";
+
+      // star image
+      const img = document.createElement("img");
+      img.src = STAR_IMAGE;
+      img.alt = "Star";
+      el.appendChild(img);
+
+      function openFromStar(e) {
+        e.preventDefault?.();
+        e.stopPropagation?.();
+        openVideoModal(item);
+        el.remove();
+      }
+
+      // mobile-safe eventi
+      el.addEventListener("pointerdown", openFromStar, { once: true });
+      el.addEventListener("touchstart", openFromStar, { once: true, passive: false });
+      el.addEventListener("click", openFromStar, { once: true });
+
+      el.addEventListener("animationend", () => el.remove());
+
+      document.body.appendChild(el);
+    }
+
+    function startStars() {
+      resetVideoDeck();
+      spawnStar();
+      starIntervalId = setInterval(spawnStar, 1400); // gustina zvezda
+    }
+
+    function stopStars() {
+      if (starIntervalId) clearInterval(starIntervalId);
+      starIntervalId = null;
+    }
 
     function spawnGift() {
       // stop if deck empty
@@ -533,6 +722,7 @@
       stage.style.display = 'block';
       snow(95);
       startGifts();
+      startStars();
     }, { once: true });
   </script>
 </body>
